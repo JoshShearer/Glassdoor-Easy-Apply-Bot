@@ -1,0 +1,239 @@
+email: joshshear@gmail.com
+password: 6408*_sel
+
+disableAntiLock: False
+
+remote: True
+
+experienceLevel:
+ internship: False
+ entry: False
+ associate: True
+ mid-senior level: True
+ director: False
+ executive: False
+
+jobTypes:
+ full-time: True
+ contract: True
+ part-time: False
+ temporary: False
+ internship: False
+ other: False
+ volunteer: False
+
+date:
+ all time: True
+ month: False
+ week: False
+ 24 hours: False
+
+positions:
+  - Software Sales
+  # - Software Developer
+  # - Software Engineer
+  # - FullStack
+  # - Blockchain Engineer
+  # - Web3 Developer
+  # - FrontEnd
+  # - BackEnd
+ #- ...
+locations:
+ - Seattle
+ - Denver, CO
+ - Las Vegas
+ - Austin
+ - New Orleans
+ - Miami
+ #- ...
+distance: 25
+
+outputFileDirectory: H:\OneDrive\Documents\MiscDocs\Filing Cabinet\Professional\JobAppsJuly2022
+
+companyBlacklist:
+ - CyberCoders
+ #- company2
+
+titleBlacklist:
+ - Senior
+ - .net
+ - .NET
+ - php
+ - PHP
+ - ruby
+ - Embedded
+ - GoLang
+ - Analyst
+ - Cloud
+ #- word2
+
+uploads:
+ resume: H:\OneDrive\Documents\MiscDocs\Filing Cabinet\Professional\Shearer_Resume_Sales_July2022.docx
+ photo: H:\OneDrive\Documents\MiscDocs\Filing Cabinet\Professional\face.png
+
+ # Cover letter is optional
+ #coverLetter: C:\Users\myDirectory\CoverLettter.pdf
+
+
+# ------------ QA section -------------------
+
+# ------------ Additional parameters: checkboxes ---------------
+checkboxes:
+ # Do you have a valid driver's license? (yes/no checkbox)
+ driversLicence: True
+ # Will you now, or in the future, require sponsorship for employment visa status (e.g. H-1B visa status)? (yes/no checkbox)
+ # This is relative to the location and your citizenship applying above, and same with legallyAuthorized.
+ requireVisa: False
+ # Are you legally authorized to work in COUNTRY? (yes/no checkbox)
+ legallyAuthorized: True
+ # We must fill this position urgently. Can you start immediately? (yes/no checkbox)
+ urgentFill: True
+ # Are you comfortable commuting to this job's location? (yes/no checkbox)
+ commute: True
+ remote: True
+ # Have you completed the following level of education: DEGREE TYPE? (yes/no checkbox)
+ degreeCompleted:
+  - High School Diploma
+  - Associate's Degree
+  - Bachelor's Degree
+  # - Associate's Degree
+  # - Master's Degree
+  # - Master of Business Administration
+  # - Doctor of Philosophy
+  # - Doctor of Medicine
+  # - Doctor of Law
+ # Are you willing to undergo a background check, in accordance with local law/regulations?
+ backgroundCheck: True
+ #Are you willing to take a drug test?
+ drugTest: True
+ onSite: True
+
+# ------------ Additional parameters: univeristyGpa ---------------
+universityGpa: 3.4
+
+# ------------ Additional parameters: languages ---------------
+languages:
+ english: Native or bilingual # None, Conversational, Professional, Native or bilingual
+ spanish: Conversational
+ portuguese: Conversational
+
+
+# ------------ Additional parameters: years of INDUSTRY experience ---------------
+# How many years of TECHNOLOGY experience do you currently have? (whole numbers only)
+industry:
+ # normal ones
+ Accounting/Auditing: 0
+ Administrative : 0
+ Advertising : 0
+ Analyst : 0
+ Art/Creative: 0
+ Business Development: 6
+ Consulting: 4
+ Customer Service: 6
+ Distribution Design: 0
+ Education: 1
+ Engineering: 10
+ Finance: 0
+ General Business: 0
+ Health Care Provider: 0
+ Human Resources: 0
+ Information Technology: 0
+ Legal: 0
+ Management: 0
+ Manufacturing: 0
+ Marketing: 0
+ Public Relations: 0
+ Purchasing: 0
+ Product Management: 0
+ Project Management: 0
+ Production: 0
+ Quality Assurance: 0
+ Research: 0
+ Sales: 6
+ B2B: 6
+ Science: 0
+ Software Development: 3
+ Development: 3
+ Strategy/Planning: 0
+ Supply Chain: 0
+ Training: 0
+ Writing/Editing: 0
+ # end normal ones
+ # put your custom ones here
+ #C++: 0
+ #Python: 1
+ # default to put for any skill that you did not list
+ default: 1
+ # end custom ones
+
+
+# ------------ Additional parameters: years of technology experience ---------------
+# How many years of work experience do you have using TECHNOLOGY? (whole numbers only)
+technology:
+ python: 4
+ selenium: 2
+ node: 2
+ web3: 1
+ blockchain: 1
+ eth: 1
+ Next: 1
+ Typescript: 1
+ Javascript: 3
+ Java: 3
+ Redux: 2
+ Rematch: 1
+ Tailwind: 1
+ MaterialUI: 3
+ SQL: 2
+ Mongo: 2
+ Express: 2
+ Firebase: 3
+ Heroku: 3
+ Solidity: 1
+ Contract: 1
+ React: 3
+ Engineering: 8
+ XML: 2
+ Professional: 1
+ full-stack: 2
+ Full Stack: 3
+ Backend: 2
+ Frontend: 3
+ Software: 3
+ Object: 3
+ git: 3
+ Git: 3
+ Sales: 6
+ Salesforce: 1
+ Strategy: 5
+ CRM: 6
+ 
+
+
+
+ # default to put for any skill that you did not list
+ default: 1
+# ------------ Additional parameters: personal info ---------------
+personalInfo:
+ First Name: Josh
+ Last Name: Shearer
+ Phone Country Code: United States (+1) # See linkedin for your country code, must be exact
+ Mobile Phone Number: 13604613810
+ Street address: 1620 S Owen Ave
+ City: Port Angeles # Include the state/province as well!
+ State: Washington
+ Zip: 98363
+ University: Washington State University
+ Linkedin: https://www.linkedin.com/in/joshshearer
+ Website: https://joshshearer.org # github/website is interchangable here
+ Headline: Problem Solver, Critical Thinker, and Builder
+#  Summary: I am an experienced and talented software developer, with extensive engineering/sales experience.  I am degreed in electrical engineering from WSU. I am specialized in web and app development (mostly backend and/or full-stack), utilizing tools such as JavaScript/React, Typescript, NodeJS, and many more.  My personal website contains more detailed descriptions of technologies, projects and experience.
+ Summary: Results-oriented sales professional with over 6 years of professional experience in Sales. In-depth knowledge of engineering teams and how to solve problems internally and externally. Strong communication skills with a commitment to improving team quotas reaching meaningful goals. Smashed business growth goals 4 years in a row. Ability to work well under pressure. Ability to listen carefully and understand customer needs to develop personalized solutions and close sales.
+
+# ------------ Additional parameters: USA employment crap ---------------
+eeo:
+ gender: Male
+ race: White
+ veteran: None
+ disability: None
+ citizenship: United States
