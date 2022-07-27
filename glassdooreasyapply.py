@@ -8,7 +8,7 @@ from datetime import date
 from itertools import product
 
 
-class GlassdoorEasyApply:
+class GlassDoorEasyApply:
     def __init__(self, parameters, driver):
         self.browser = driver
         self.email = parameters['email']
@@ -41,12 +41,13 @@ class GlassdoorEasyApply:
 
     def login(self):
         try:
-            self.browser.get("https://www.linkedin.com/login")
-            time.sleep(random.uniform(5, 10))
-            self.browser.find_element_by_id("username").send_keys(self.email)
-            self.browser.find_element_by_id("password").send_keys(self.password)
-            self.browser.find_element_by_css_selector(".btn__primary--large").click()
-            time.sleep(random.uniform(5, 10))
+            self.browser.get("https://www.glassdoor.com/index.htm")
+            time.sleep(random.uniform(1, 5))
+            self.browser.find_element_by_css_selector('#SiteNav > nav > div.d-none.d-md-block.LockedHomeHeaderStyles__bottomBorder > div > div > div > button').click()
+            self.browser.find_element_by_id("modalUserEmail").send_keys(self.email)
+            self.browser.find_element_by_id("modalUserPassword").send_keys(self.password)
+            self.browser.find_element_by_css_selector("#LoginModal > div > div > div.modal_main.actionBarMt0 > div.fullContent > div.modal_content > div > div > form > div.d-flex.align-items-center.flex-column > button > span").click()
+            time.sleep(random.uniform(1, 5))
         except TimeoutException:
             raise Exception("Could not login!")
 
@@ -58,6 +59,33 @@ class GlassdoorEasyApply:
             input("Please complete the security check and press enter in this console when it is done.")
             time.sleep(random.uniform(5.5, 10.5))
 
+    def check_notif_modal(self):
+        try:
+            self.browser.find_element_by_class_name("modal_main")
+            self.browser.find_element_by_class_name("modal_closeIcon").click()
+        except:
+            pass
+        
+    def get_base_with_location(self, location, position):
+        self.browser.find_element_by_id("sc.keyword").send_keys(position)
+        loc = self.browser.find_element_by_id("sc.location")
+        loc.send_keys(Keys.CONTROL + 'a')
+        time.sleep(2)
+        loc.send_keys(Keys.DELETE)
+        time.sleep(3)
+        loc = self.browser.find_element_by_id("sc.location")
+        loc.send_keys(location)
+        time.sleep(1)
+        loc.send_keys(Keys.ARROW_DOWN)
+        time.sleep(1)
+        loc.send_keys(Keys.RETURN)
+        time.sleep(2)
+        self.browser.find_element_by_xpath('//*[@id="Discover"]/div/div/div[1]/div[1]/div[3]/a/strong').click()
+        self.check_notif_modal()
+        current_url = self.browser.current_url
+        base_url = current_url.split('.htm')[0]
+        return base_url + ".htm"
+        
     def start_applying(self):
         searches = list(product(self.positions, self.locations))
         random.shuffle(searches)
@@ -67,17 +95,18 @@ class GlassdoorEasyApply:
         minimum_page_time = time.time() + minimum_time
 
         for (position, location) in searches:
-            location_url = "&location=" + location
-            job_page_number = -1
 
             print("Starting the search for " + position + " in " + location + ".")
+            base_url = self.get_base_with_location(location, position)
+            job_page_number = -1
+
 
             try:
                 while True:
                     page_sleep += 1
                     job_page_number += 1
                     print("Going to job page " + str(job_page_number))
-                    self.next_job_page(position, location_url, job_page_number)
+                    self.next_job_page(base_url, job_page_number)
                     time.sleep(random.uniform(1.5, 3.5))
                     print("Starting the application process for this page...")
                     self.apply_jobs(location)
@@ -121,14 +150,14 @@ class GlassdoorEasyApply:
 
         if 'unfortunately, things aren' in self.browser.page_source.lower():
             raise Exception("No more jobs on this page")
-
         try:
-            job_results = self.browser.find_element_by_class_name("jobs-search-results")
+            job_results = self.browser.find_element_by_id("MainCol")
             self.scroll_slow(job_results)
             self.scroll_slow(job_results, step=250, reverse=True)
-
+# //*[@id="MainCol"]/div[1]/ul/li[1]
+# //*[@id="MainCol"]/div[1]/ul/li[2]
             # job_list = self.browser.find_elements_by_class_name('scaffold-layout__list-container')[0].find_elements_by_class_name('jobs-search-results__list')
-            job_list = self.browser.find_elements_by_class_name('jobs-search-results__list')[0].find_elements_by_class_name('jobs-search-results__list-item')
+            job_list = self.browser.find_elements_by_xpath('//*[@id="MainCol"]/div[1]/ul/li')
         except:
             raise Exception("No more jobs on this page")
 
@@ -139,16 +168,16 @@ class GlassdoorEasyApply:
             job_title, company, job_location, apply_method, link = "", "", "", "", ""
 
             try:
-                job_title = job_tile.find_element_by_class_name('job-card-list__title').text
-                link = job_tile.find_element_by_class_name('job-card-list__title').get_attribute('href').split('?')[0]
+                job_title = job_tile.find_element_by_class_name('eigr9kq1').find_element_by_tag_name('span').text
+                link = job_tile.find_element_by_class_name('job-search-key-1rd3saf').get_attribute('href').split('?')[0]
             except:
                 pass
             try:
-                company = job_tile.find_element_by_class_name('job-card-container__company-name').text
+                company = job_tile.find_element_by_class_name('e1n63ojh0').find_element_by_tag_name('span').text
             except:
                 pass
             try:
-                job_location = job_tile.find_element_by_class_name('job-card-container__metadata-item').text
+                job_location = job_tile.find_element_by_class_name('e1rrn5ka').text
             except:
                 pass
             try:
@@ -167,13 +196,10 @@ class GlassdoorEasyApply:
             if company.lower() not in [word.lower() for word in self.company_blacklist] and \
                contains_blacklisted_keywords is False and link not in self.seen_jobs:
                 try:
-                    job_el = job_tile.find_element_by_class_name('job-card-list__title')
-                    job_el.send_keys(Keys.CONTROL + Keys.ENTER)
-                    time.sleep(1)
-                    self.browser.switch_to.window(self.browser.window_handles[1])
+                    job_el = job_tile.find_element_by_class_name('eigr9kq1')
+                    job_el.click()
 
                     time.sleep(random.uniform(3, 5))
-
 
                     try:
                         done_applying = self.apply_to_job()
@@ -181,8 +207,8 @@ class GlassdoorEasyApply:
                             print("Done applying to the job!")
                         else:
                             print('Already applied to the job!')
-                        self.browser.close()
-                        self.browser.switch_to.window(self.browser.window_handles[0])
+                        # self.browser.close()
+                        # self.browser.switch_to.window(self.browser.window_handles[0])
 
                     except:
                         temp = self.file_name
@@ -212,28 +238,28 @@ class GlassdoorEasyApply:
         easy_apply_button = None
 
         try:
-            easy_apply_button = self.browser.find_element_by_class_name('jobs-apply-button')
+            easy_apply_button = self.browser.find_element_by_class_name('e1mdf2m0')
         except:
             return False
 
-        try:
-            job_description_area = self.browser.find_element_by_class_name("jobs-search__job-details--container")
-            self.scroll_slow(job_description_area, end=1600)
-            self.scroll_slow(job_description_area, end=1600, step=400, reverse=True)
-        except:
-            pass
+        # try:
+        #     job_description_area = self.browser.find_element_by_class_name("JDCol")
+        #     self.scroll_slow(job_description_area, end=1200)
+        #     self.scroll_slow(job_description_area, end=1200, step=400, reverse=True)
+        # except:
+        #     pass
 
         print("Applying to the job....")
         easy_apply_button.click()
 
         button_text = ""
-        submit_application_text = 'submit application'
+        submit_application_text = 'Apply'
         while submit_application_text not in button_text.lower():
             retries = 3
             while retries > 0:
                 try:
                     self.fill_up()
-                    next_button = self.browser.find_element_by_class_name("artdeco-button--primary")
+                    next_button = self.browser.find_element_by_class_name("icl-Button")
                     button_text = next_button.text.lower()
                     if submit_application_text in button_text:
                         try:
@@ -281,10 +307,10 @@ class GlassdoorEasyApply:
 
     def home_address(self, element):
         try:
-            groups = element.find_elements_by_class_name('jobs-easy-apply-form-section__grouping')
+            groups = element.find_elements_by_class_name('ia-UserFields')
             if len(groups) > 0:
                 for group in groups:
-                    lb = group.find_element_by_tag_name('label').text.lower()
+                    lb = group.find_element_by_tag_name('label').find_element_by_tag_name('span').text.lower()
                     input_field = group.find_element_by_tag_name('input')
                     if 'street' in lb:
                         self.enter_text(input_field, self.personal_info['Street address'])
@@ -311,7 +337,7 @@ class GlassdoorEasyApply:
 
     def additional_questions(self):
         #pdb.set_trace()
-        frm_el = self.browser.find_elements_by_class_name('jobs-easy-apply-form-section__grouping')
+        frm_el = self.browser.find_elements_by_class_name('icl-TextInput-wrapper')
         if len(frm_el) > 0:
             for el in frm_el:
                 # Radio check
@@ -655,11 +681,12 @@ class GlassdoorEasyApply:
 
     def fill_up(self):
         try:
-            easy_apply_content = self.browser.find_element_by_class_name('jobs-easy-apply-content')
-            b4 = easy_apply_content.find_element_by_class_name('pb4')
-            pb4 = easy_apply_content.find_elements_by_class_name('pb4')
+            time.sleep(2)
+            # seems that this component may be hidden??? cannot find
+            easy_apply_content = self.browser.find_element_by_xpath('//*[@id="ia-ApplyFormScreen"]/div[2]/form')
+            b4 = easy_apply_content.find_element_by_class_name('ia-UserFields-fragment')
+            pb4 = easy_apply_content.find_elements_by_class_name('ia-UserFields-fragment')
             if len(pb4) > 0:
-                for pb in pb4:
                     try:
                         label = pb.find_element_by_tag_name('h3').text.lower()
                         try:
@@ -672,7 +699,7 @@ class GlassdoorEasyApply:
                         except:
                             pass
 
-                        if 'home address' in label:
+                        if 'Address' in label:
                             self.home_address(pb)
                         elif 'contact info' in label:
                             self.contact_info()
@@ -712,42 +739,29 @@ class GlassdoorEasyApply:
         remote_url = ""
 
         if parameters['remote']:
-            remote_url = "f_CF=f_WRA"
+            remote_url = "?remoteWorkType=1"
 
-        level = 1
-        experience_level = parameters.get('experienceLevel', [])
-        experience_url = "f_E="
-        for key in experience_level.keys():
-            if experience_level[key]:
-                experience_url += "%2C" + str(level)
-            level += 1
+        distance_url = "?radius=" + str(parameters['distance'])
 
-        distance_url = "?distance=" + str(parameters['distance'])
-
-        job_types_url = "f_JT="
-        job_types = parameters.get('experienceLevel', [])
-        for key in job_types:
-            if job_types[key]:
-                job_types_url += "%2C" + key[0].upper()
+        # job_types_url = "?jobType="
+        # job_types = parameters.get('jobTypes', [])
+        # for key in job_types:
+        #     if job_types[key]:
+        #         job_types_url += "%2C" + key.lower()
 
         date_url = ""
-        dates = {"all time": "", "month": "&f_TPR=r2592000", "week": "&f_TPR=r604800", "24 hours": "&f_TPR=r86400"}
-        date_table = parameters.get('date', [])
-        for key in date_table.keys():
-            if date_table[key]:
-                date_url = dates[key]
-                break
+        if parameters['date']["Age"]:
+            date_url = "&fromAge=" + str(parameters['date']['Age'])
 
-        easy_apply_url = "&f_LF=f_AL"
+        easy_apply_url = "&applicationType=1"
 
-        extra_search_terms = [distance_url, remote_url, job_types_url, experience_url]
+        extra_search_terms = [distance_url, remote_url]
         extra_search_terms_str = '&'.join(term for term in extra_search_terms if len(term) > 0) + easy_apply_url + date_url
 
         return extra_search_terms_str
 
-    def next_job_page(self, position, location, job_page):
-        self.browser.get("https://www.linkedin.com/jobs/search/" + self.base_search_url +
-                         "&keywords=" + position + location + "&start=" + str(job_page*25))
+    def next_job_page(self, base_url, job_page):
+        self.browser.get(base_url + self.base_search_url)
 
         self.avoid_lock()
 
