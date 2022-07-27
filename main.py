@@ -2,7 +2,7 @@ import yaml, pdb
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
-from glassdooreasyapply import GlassdoorEasyApply
+from glassdooreasyapply import GlassDoorEasyApply
 from validate_email import validate_email
 
 def init_browser():
@@ -122,7 +122,7 @@ if __name__ == '__main__':
     parameters = validate_yaml()
     browser = init_browser()
 
-    bot = LinkedinEasyApply(parameters, browser)
+    bot = GlassDoorEasyApply(parameters, browser)
     bot.login()
     bot.security_check()
     bot.start_applying()
